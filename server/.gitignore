@@ -1,0 +1,4 @@
+# Ignorar archivos de video segmentados
+slv/*.ts
+temp/hls/*.ts
+temp/hls/*.m3u8
