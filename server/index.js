@@ -35,7 +35,7 @@ nms.on('prePublish', (id, streamPath, args) => {
         fs.unlinkSync(outputFilePath);
     }
 
-    const ffmpegCommand = `ffmpeg -loglevel debug -i rtmp://localhost/live/test -c:v libx264 -c:a aac -f hls -hls_time 10 -hls_list_size 0 -hls_flags delete_segments -hls_segment_filename "slv/segment_%03d.ts" slv/stream.m3u8`;
+    const ffmpegCommand = `ffmpeg -loglevel debug -i rtmp://192.168.1.100/live/test -c:v libx264 -c:a aac -f hls -hls_time 10 -hls_list_size 0 -hls_flags delete_segments -hls_segment_filename "slv/segment_%03d.ts" slv/stream.m3u8`;
 
     const ffmpegProcess = exec(ffmpegCommand);
 
