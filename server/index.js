@@ -61,9 +61,7 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use('/slv', express.static(slvPath));
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+
 // Endpoint SSE para notificar actualizaciones
 app.get('/api/stream-updates', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
