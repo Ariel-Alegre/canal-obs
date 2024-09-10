@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Stream</title>
+    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+        }
+        .video-js {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div data-vjs-player>
+        <video id="video" class="video-js vjs-default-skin" controls autoplay></video>
+    </div>
+
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+    <script src="https://unpkg.com/@videojs/http-streaming/dist/videojs-http-streaming.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = videojs('video', {
+                controls: true,
+                autoplay: true,
+                preload: 'auto',
+                fluid: true,
+                sources: [{
+                    src: '/slv/stream.m3u8', // URL del archivo .m3u8
+                    type: 'application/x-mpegURL'
+                }]
+            });
+
+            // Manejador de eventos para reconectar si hay errores
+            player.on('error', function() {
+                console.error('Error en la transmisión');
+                // Intentar reconectar después de un pequeño retraso
+                setTimeout(() => {
+                    player.src({ src: '/slv/stream.m3u8', type: 'application/x-mpegURL' });
+                    player.load();
+                    player.play();
+                }, 5000); // Retraso de 5 segundos
+            });
+
+            // Actualizar el reproductor si el archivo m3u8 cambia
+            function updateStream() {
+                player.src({ src: '/slv/stream.m3u8', type: 'application/x-mpegURL' });
+                player.load();
+                player.play();
+            }
+
+            // Escucha cambios en el archivo m3u8
+            const eventSource = new EventSource('/api/stream-updates');
+            eventSource.onmessage = function(event) {
+                if (event.data === 'update') {
+                    updateStream();
+                }
+            };
+        });
+    </script>
+</body>
+</html>
