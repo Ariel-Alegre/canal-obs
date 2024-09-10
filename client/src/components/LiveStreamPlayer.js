@@ -14,7 +14,7 @@ const LiveStreamPlayer = () => {
         // Verificar si el archivo .m3u8 está disponible
         const checkStreamAvailability = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/slv/stream.m3u8');
+                const response = await axios.get('https://canal-obs-production.up.railway.app/slv/stream.m3u8');
                 if (response.status === 200) {
                     setStreamAvailable(true);
                 }
@@ -31,11 +31,11 @@ const LiveStreamPlayer = () => {
             console.log('Initializing Video.js player');
             playerRef.current = videojs(videoRef.current, {
                 controls: true,
-                autoplay: true,
+                autoplay: 'play',
                 preload: 'auto',
                 fluid: true,
                 sources: [{
-                    src: 'http://localhost:3001/slv/stream.m3u8',
+                    src: 'https://canal-obs-production.up.railway.app/slv/stream.m3u8',
                     type: 'application/x-mpegURL'
                 }]
             });
@@ -44,7 +44,7 @@ const LiveStreamPlayer = () => {
             playerRef.current.on('error', function() {
                 console.error('Error en la transmisión');
                 setTimeout(() => {
-                    playerRef.current.src({ src: 'http://localhost:3001/slv/stream.m3u8', type: 'application/x-mpegURL' });
+                    playerRef.current.src({ src: 'https://canal-obs-production.up.railway.app/slv/stream.m3u8', type: 'application/x-mpegURL' });
                     playerRef.current.load();
                     playerRef.current.play();
                 }, 5000); // Retraso de 5 segundos
